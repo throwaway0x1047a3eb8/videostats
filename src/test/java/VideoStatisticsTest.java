@@ -34,10 +34,7 @@ public class VideoStatisticsTest {
         VideoStatistics.DateService dateService = () -> 61000;
         VideoStatistics stats = new VideoStatistics(dateService);
 
-        try {
-            stats.post(10.5, 60666);
-        } catch (IllegalArgumentException ignored) {
-        }
+        stats.post(10.5, 60666);
 
         VideoStatistics.Result result = stats.get(61666);
         assertEquals(result.count, 1);
@@ -52,10 +49,7 @@ public class VideoStatisticsTest {
         VideoStatistics.DateService dateService = () -> 61000;
         VideoStatistics stats = new VideoStatistics(dateService);
 
-        try {
-            stats.post(10.5, 60666);
-        } catch (IllegalArgumentException ignored) {
-        }
+        stats.post(10.5, 60666);
 
         VideoStatistics.Result result = stats.get(121666);
         assertEquals(result.count, 0);
@@ -70,12 +64,9 @@ public class VideoStatisticsTest {
         VideoStatistics.DateService dateService = () -> 61000;
         VideoStatistics stats = new VideoStatistics(dateService);
 
-        try {
-            stats.post(5, 60666);
-            stats.post(25, 60667);
-            stats.post(125, 60668);
-        } catch (IllegalArgumentException ignored) {
-        }
+        stats.post(5, 60666);
+        stats.post(25, 60667);
+        stats.post(125, 60668);
 
         VideoStatistics.Result result = stats.get(60669);
         assertEquals(result.count, 3);
@@ -90,14 +81,11 @@ public class VideoStatisticsTest {
         VideoStatistics.DateService dateService = () -> 61000;
         VideoStatistics stats = new VideoStatistics(dateService);
 
-        try {
-            stats.post(5, 60666);
-            stats.post(1, 60667);
-            stats.post(25, 60668);
-            stats.post(625, 60669);
-            stats.post(125, 60670);
-        } catch (IllegalArgumentException ignored) {
-        }
+        stats.post(5, 60666);
+        stats.post(1, 60667);
+        stats.post(25, 60668);
+        stats.post(625, 60669);
+        stats.post(125, 60670);
 
         VideoStatistics.Result result = stats.get(60669);
         // Ensures min/max values are updated accordingly.
@@ -110,13 +98,10 @@ public class VideoStatisticsTest {
         VideoStatistics.DateService dateService = () -> 61000;
         VideoStatistics stats = new VideoStatistics(dateService);
 
-        try {
-            stats.post(5, 60666);
-            // Happens 1 minute after the previous post call.
-            // Collides with it and must replace it.
-            stats.post(25, 120666);
-        } catch (IllegalArgumentException ignored) {
-        }
+        stats.post(5, 60666);
+        // Happens 1 minute after the previous post call.
+        // Collides with it and must replace it.
+        stats.post(25, 120666);
 
         VideoStatistics.Result result = stats.get(60669);
         assertEquals(result.count, 1);
@@ -131,13 +116,10 @@ public class VideoStatisticsTest {
         VideoStatistics.DateService dateService = () -> 61000;
         VideoStatistics stats = new VideoStatistics(dateService);
 
-        try {
-            stats.post(5, 60666);
-            stats.post(25, 60667);
-            stats.post(125, 60668);
-            stats.post(25, 120666);
-        } catch (IllegalArgumentException ignored) {
-        }
+        stats.post(5, 60666);
+        stats.post(25, 60667);
+        stats.post(125, 60668);
+        stats.post(25, 120666);
 
         // None of the post calls above should matter.
         stats.delete();
