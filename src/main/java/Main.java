@@ -16,7 +16,9 @@ public class Main {
         post("/videos", (request, response) -> {
             Video video = new Gson().fromJson(request.body(), Video.class);
             try {
-                videoStatistics.post(video.duration, video.timestamp);
+                synchronized (videoStatistics) {
+                    videoStatistics.post(video.duration, video.timestamp);
+                }
             } catch (IllegalArgumentException e) {
                 response.status(204);
                 return "";
@@ -27,14 +29,20 @@ public class Main {
         });
 
         delete("/videos", (request, response) -> {
-            videoStatistics.delete();
+            synchronized (videoStatistics) {
+                videoStatistics.delete();
+            }
 
             response.status(204);
             return "";
         });
 
         get("/statistics", (request, response) -> {
-            return new Gson().toJson(videoStatistics.get(new Date().getTime()));
+            VideoStatistics.Result result;
+            synchronized (videoStatistics) {
+                result = videoStatistics.get(new Date().getTime());
+            }
+            return new Gson().toJson(result);
         });
     }
 }
