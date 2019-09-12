@@ -11,14 +11,15 @@ public class Main {
     }
 
     public static void main(String[] args) {
+        int cores = Runtime.getRuntime().availableProcessors();
+        threadPool(2 * cores);
+
         VideoStatistics videoStatistics = new VideoStatistics(() -> new Date().getTime());
 
         post("/videos", (request, response) -> {
             Video video = new Gson().fromJson(request.body(), Video.class);
             try {
-                synchronized (videoStatistics) {
-                    videoStatistics.post(video.duration, video.timestamp);
-                }
+                videoStatistics.post(video.duration, video.timestamp);
             } catch (IllegalArgumentException e) {
                 response.status(204);
                 return "";
@@ -29,9 +30,7 @@ public class Main {
         });
 
         delete("/videos", (request, response) -> {
-            synchronized (videoStatistics) {
-                videoStatistics.delete();
-            }
+            videoStatistics.delete();
 
             response.status(204);
             return "";
@@ -39,9 +38,7 @@ public class Main {
 
         get("/statistics", (request, response) -> {
             VideoStatistics.Result result;
-            synchronized (videoStatistics) {
-                result = videoStatistics.get(new Date().getTime());
-            }
+            result = videoStatistics.get(new Date().getTime());
             return new Gson().toJson(result);
         });
     }
