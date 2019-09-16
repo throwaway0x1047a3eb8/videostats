@@ -38,7 +38,7 @@ public class Main {
 
         get("/statistics", (request, response) -> {
             VideoStatistics.Result result;
-            result = videoStatistics.get(new Date().getTime());
+            result = videoStatistics.get();
             return new Gson().toJson(result);
         });
     }

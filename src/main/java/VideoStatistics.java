@@ -74,8 +74,8 @@ public class VideoStatistics {
         }
     }
 
-    public Result get(long now) {
-        int nowSeconds = (int) (now / 1000);
+    public Result get() {
+        int nowSeconds = (int) (dateService.getTime() / 1000);
 
         Result statistics = new Result();
         statistics.max = 0;
